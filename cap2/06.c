@@ -1,6 +1,6 @@
 /*
  * Function setbits(x, p, n y):
- * retorna x com n bits que começam na posição p dos n bits mais à direita de y
+ * retorna x com os n bits mais à direita de y, a partir da posição p
  */
 
 #include <stdio.h>
@@ -18,8 +18,10 @@ unsigned getbits(unsigned x, int p, int n) {
 }
 
 unsigned setbits(unsigned x, int p, int n, unsigned y) {
-    unsigned k = p - n + 1;
-    unsigned j = ~(~0 << n);
+    int ymask = y & ((1U << n) - 1);
+    ymask = ymask << (p - n + 1);
 
-    return x | (~(j << k) & x) | ((y & j) << k);
+    int xmask = ((1U << n) - 1) << (p - n + 1);
+
+    return (x & ~xmask) | ymask;
 }
