@@ -1,79 +1,44 @@
 #include <stdio.h>
-#include <string.h>
 
-#define MAX 100
+#define BUFF 100
 
-int gline(char s[], int lim);
-int rightmostOccurrence(char in[], char search[]);
+int line(char s[], int lim);
+int strindex(char s[], char t[], unsigned n);
 
-char pattern[] = "ia";
+int main(void) {
+    int len;
+    char s[BUFF];
+    char t[] = "ia";
 
-int main(void)
-{
-    int len = 0;
-    int rindex;
-    char s[MAX];
+    while ((len=line(s, BUFF))>0) {
+        strindex(s, t, len);
+    }
 
-    while((len = gline(s, MAX))>0)
-        if (rightmostOccurrence(s, pattern) >= 0)
-        {
-            printf("%s", s);
-
-            if(s[len-1]!='\n')
-                putchar('\n');
-        }
-
-    return len;
+    return 0;
 }
 
-int gline(char s[], int lim)
-{
+int line(char s[], int lim) {
     int i, c;
 
-    i = 0;
-    for (;lim > 0  && (c=getchar())!=EOF && c!='\n'; --lim)
+    for (i=0, c=0;   lim > 0  && (c=getchar())!=EOF && c!='\n'; --lim)
         s[i++] = c;
     if (c=='\n')
-        s[i++] = c;
-
-    s[i++] = '\0';
+        s[i++] = '\0';
     
     return i;
+   
 }
 
-int rightmostOccurrence(char s[], char t[])
-{
-    int i, j, k;
-    int len_t = strlen(t);
+// Procura em s[] a ocorrência mais à direita de t[]
+int strindex(char s[], char t[], unsigned n) {
+    int i, j;
 
-    for (i=strlen(s); i>=0; i--)
-    {
-        for (j=i, k=len_t - 1; k>=0  && s[j]==t[k]; j--, k--)
-            ;
-        if (k>0)
-        {
-            printf("A última ocorrência está em %d.\n", i - (len_t - 1));
-            return i - (len_t - 1);
+    for (i=0; t[i]!='\0'; ++i) { // Loop dentro de t[]
+        for (j = n; j > 0 && s[j] != '\n'; --j) { // Loop dentro de s[]
+            if (t[i] == s[j]) {
+                printf("At %d\n", j);
+            }
         }
     }
-
-    return -1;
+    return 0;
 }
-
-/*
-int strindex(char s[], char t[])
-{
-    int i, j, k;
-
-    for(i=0; s[i] != '\0'; i++)
-    {
-        for (j=i, k=0; t[k]!='\0' && s[j]==t[k]; j++, k++)
-            ;
-        if (k>0 && t[k] == '\0')
-            return i;
-    }
-
-    return -1;
-}
-*/
-
